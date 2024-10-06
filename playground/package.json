@@ -1,0 +1,19 @@
+{
+	"private": true,
+	"name": "@witchcraft/nuxt-postgres-playground",
+	"type": "module",
+	"scripts": {
+		"dev": "nuxi dev",
+		"build": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'nuxi build'",
+		"generate": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'nuxi generate'",
+		"prepare": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxi prepare'",
+		"update-dep": "cd ../ && pnpm build:only && cd playground && pnpm update @witchcraft/nuxt-postgres"
+	},
+	"dependencies": {
+		"@witchcraft/nuxt-postgres": "file:../",
+		"nuxt": "^4.0.3"
+	},
+	"devDependencies": {
+		"cross-env": "^10.0.0"
+	}
+}
