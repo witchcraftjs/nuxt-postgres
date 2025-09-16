@@ -10,7 +10,7 @@
 		"update-dep": "cd ../ && pnpm build:only && cd playground && pnpm update @witchcraft/nuxt-postgres"
 	},
 	"dependencies": {
-		"@witchcraft/nuxt-postgres": "file:../",
+		"@witchcraft/nuxt-postgres": "file:..",
 		"nuxt": "^4.0.3"
 	},
 	"devDependencies": {

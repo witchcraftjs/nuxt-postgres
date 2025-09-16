@@ -16,3 +16,7 @@ coverage
 *.lcov
 .nyc_output
 
+.direnv/
+.devenv/
+# this is just for testing
+!.env

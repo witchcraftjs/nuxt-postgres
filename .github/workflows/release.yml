@@ -25,6 +25,9 @@ jobs:
       with:
         USE_LOCKFILE: ${{ secrets.USE_LOCKFILE }}
 
+    - run: pnpm i --frozen-lockfile
+      working-directory: playground
+
     - name: Build
       uses: ./.github/actions/composite-build
 
