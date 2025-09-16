@@ -161,9 +161,17 @@ export interface ModuleOptions extends PostgresOptions, ClientPostgresOptions {
 	/**
 	 * Will create the types for this key on the H3Event
 	 *
-	 * "$postgres" by default
+	 * @default $postgres
 	 */
 	eventContextKeyName: string
+	/**
+	 * Where the postgres instance is (no extension needed), to set the #postgres alias autimatically.
+	 *
+	 * Pass false to disable.
+	 *
+	 * @default ~~/server/postgres
+	 */
+	aliasServerImport: string | false
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -194,7 +202,8 @@ export default defineNuxtModule<ModuleOptions>({
 		devAutoGenerateMigrations: false,
 		clientPgLitePath: "idb://local-pglite",
 		autoMigrateClientDb: true,
-		eventContextKeyName: "$postgres"
+		eventContextKeyName: "$postgres",
+		aliasServerImport: "~~/server/postgres"
 	},
 	moduleDependencies: {
 		"@witchcraft/nuxt-logger": {
@@ -294,6 +303,9 @@ export default defineNuxtModule<ModuleOptions>({
 		logger.info("plugged")
 		addImportsDir(resolve("runtime/composables"))
 		nuxt.options.alias["#postgres-client"] = resolve("runtime/composables/useClientDb")
+		if (options.aliasServerImport) {
+			nuxt.options.alias["#postgres"] = await resolvePath(options.aliasServerImport, nuxt.options.alias)
+		}
 
 		addTypeTemplate({
 			filename: "types/witchcraft-postgres.d.ts",

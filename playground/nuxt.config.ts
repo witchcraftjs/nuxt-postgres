@@ -1,4 +1,4 @@
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url"
 
 export default defineNuxtConfig({
 	modules: [
@@ -9,9 +9,9 @@ export default defineNuxtConfig({
 	],
 
 	devtools: { enabled: true },
-	alias: {
-		"#postgres": fileURLToPath(new URL("server/postgres.js", import.meta.url))
-	},
+	// alias: {
+	// 	"#postgres": fileURLToPath(new URL("server/postgres.js", import.meta.url))
+	// },
 	future: {
 		compatibilityVersion: 4 as const
 	},

@@ -21,7 +21,8 @@ export default defineNuxtConfig({
 	],
 	alias: {
 		// add alias to where db will be
-		"#postgres": fileURLToPath(new URL("server/postgres.js", import.meta.url))
+		// this one is auto created (see aliasServerImport option)
+		// "#postgres": fileURLToPath(new URL("server/postgres.js", import.meta.url))
 	},
 	postgres: {
 		connectionsOptions: {
@@ -33,7 +34,7 @@ export default defineNuxtConfig({
 
 
 Use the included drizzle config if you want, it will ensure you define the right variables:
-```ts
+
 ```ts [drizzleConfig.ts]
 import { drizzleConfig } from "@witchcraft/nuxt-postgres/drizzleConfig"
 import { ensureEnv } from "@witchcraft/nuxt-utils/utils/ensureEnv"
@@ -97,9 +98,8 @@ export default defineEventHandler(async event => {
 	const pg = event.context.$postgres
 })
 	
-// or using an alias
+// or using the alias
 import { postgres } from "#postgres"
-
 ```
 
 ## Local Postgres Client
