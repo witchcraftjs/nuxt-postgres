@@ -20,6 +20,8 @@ import type { Options } from "postgres"
 import topLevelAwait from "vite-plugin-top-level-await"
 import wasm from "vite-plugin-wasm"
 
+import pkg from "../package.json" with { type: "json" }
+
 type ConnectionOptions = {
 	host: string
 	port: number
@@ -194,6 +196,11 @@ export default defineNuxtModule<ModuleOptions>({
 		devAutoGenerateMigrations: false,
 		clientPgLitePath: "idb://local-pglite",
 		autoMigrateClientDb: true
+	},
+	moduleDependencies: {
+		"@witchcraft/nuxt-logger": {
+			version: pkg.dependencies["@witchcraft/nuxt-logger"]
+		}
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
