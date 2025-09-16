@@ -55,12 +55,6 @@ export type PostgresOptions = {
 	 */
 	serverMigrationConfig: MigrationConfig
 	/**
-	 * The path to the schema to use for the server side database.
-	 *
-	 * @default "~~/db/schema.ts"
-	 */
-	serverSchema: string
-	/**
 	 * See usePgLiteOnServer for more info.
 	 *
 	 * @experimental
@@ -154,7 +148,6 @@ export type ClientPostgresOptions = {
 }
 
 declare module "@nuxt/schema" {
-
 	interface RuntimeConfig {
 		postgres: PostgresOptions
 	}
@@ -165,6 +158,12 @@ declare module "@nuxt/schema" {
 }
 
 export interface ModuleOptions extends PostgresOptions, ClientPostgresOptions {
+	/**
+	 * Will create the types for this key on the H3Event
+	 *
+	 * "$postgres" by default
+	 */
+	eventContextKeyName: string
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -176,7 +175,6 @@ export default defineNuxtModule<ModuleOptions>({
 		serverPostgresjsOptions: {
 			max: 1
 		},
-		serverSchema: "~~/db/schema.ts",
 		serverMigrationConfig: {
 			migrationsFolder: "~~/db/migrations"
 		},
@@ -195,7 +193,8 @@ export default defineNuxtModule<ModuleOptions>({
 		useClientDb: false,
 		devAutoGenerateMigrations: false,
 		clientPgLitePath: "idb://local-pglite",
-		autoMigrateClientDb: true
+		autoMigrateClientDb: true,
+		eventContextKeyName: "$postgres"
 	},
 	moduleDependencies: {
 		"@witchcraft/nuxt-logger": {
@@ -237,7 +236,6 @@ export default defineNuxtModule<ModuleOptions>({
 
 		const serverConfig = nuxt.options.runtimeConfig.postgres.serverMigrationConfig
 		serverConfig.migrationsFolder = resolveAlias(serverConfig.migrationsFolder, nuxt.options.alias)
-		nuxt.options.runtimeConfig.postgres.serverSchema = await resolvePath(options.serverSchema, nuxt.options.alias)
 
 		nuxt.options.build.transpile.push(resolve("runtime/server/plugins/initServerPostgresDb"))
 		nuxt.options.build.transpile.push(resolve("runtime/server/postgres"))
@@ -293,10 +291,8 @@ export default defineNuxtModule<ModuleOptions>({
 			}
 		}
 		addServerScanDir(resolve("runtime/server"))
-		addServerPlugin(resolve("runtime/server/plugins/initServerPostgresDb"))
 		logger.info("plugged")
 		addImportsDir(resolve("runtime/composables"))
-		nuxt.options.alias["#postgres"] = resolve("runtime/server/postgres")
 		nuxt.options.alias["#postgres-client"] = resolve("runtime/composables/useClientDb")
 
 		addTypeTemplate({
@@ -306,7 +302,7 @@ export default defineNuxtModule<ModuleOptions>({
 			import { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 				declare module 'h3' {
 					interface H3EventContext {
-						$postgres: PgliteDatabase | PostgresJsDatabase;
+						${options.eventContextKeyName}: PgliteDatabase | PostgresJsDatabase;
 					}
 				}
 				export {}

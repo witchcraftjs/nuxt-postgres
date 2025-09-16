@@ -9,15 +9,24 @@ Nuxt module to connect to postgres with drizzle. Also has support for having a c
 
 # Setup
 
+The playground contains this basic setup (note it will NOT work on stackblitz because you need to be running postgres and we can't do that).
+
+- [🏀 Online playground](https://stackblitz.com/github/witchcraftjs/nuxt-postgres?file=playground%2Fapp.vue)
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-	modules: ["@witchcraft/nuxt-postgres"],
+	modules: [
+		"@witchcraft/nuxt-postgres",
+		"@witchcraft/nuxt-logger" // optional
+	],
+	alias: {
+		// add alias to where db will be
+		"#postgres": fileURLToPath(new URL("server/postgres.js", import.meta.url))
+	},
 	postgres: {
 		connectionsOptions: {
 			...
 		},
-		serverSchema: "~~/db/schema.ts", // path to the schema file
 	}
 })
 ```
@@ -26,9 +35,7 @@ export default defineNuxtConfig({
 Use the included drizzle config if you want, it will ensure you define the right variables:
 ```ts
 ```ts [drizzleConfig.ts]
-// careful with imports, esm is borked, see nuxt-postgres/src/drizzleConfig.ts
-// special workarounds were created for the these imports so they work
-import { drizzleConfig } from "@witchcraft/nuxt-postgres/drizzleConfig.js"
+import { drizzleConfig } from "@witchcraft/nuxt-postgres/drizzleConfig"
 import { ensureEnv } from "@witchcraft/nuxt-utils/utils/ensureEnv"
 import { defineConfig } from "drizzle-kit"
 import path from "path"
@@ -45,12 +52,34 @@ export default defineConfig({
 	// out: "./db/migrations",
 })
 ```
+Setup the database:
+```ts [server/postgres.ts]
+import {
+	createPostgresDb,
+	useServerLogger // from @witchcraft/nuxt-logger
+} from "#imports"
+import * as schema from "~~/db/schem.js"
 
-To migrate the db when starting the server:
+export const {
+	migrate,
+	postgres
+} = createPostgresDb(schema, useServerLogger)
+```
+
+Setup $postgres on event and optionally migrate the db when starting the server:
+
 ```ts [server/plugins/init.ts]
+import { defineNitroPlugin } from "#imports"
 import { migrate } from "#postgres"
+import { postgres } from "../path/to/instance/or#postgres"
 
-export default defineNitroPlugin(() => {
+export default defineNitroPlugin((nitroApp) => {
+
+	// the module auto types the $postgres key (you can change the key name with the eventContextKeyName option)
+	nitroApp.hooks.hook("request", event => {
+		event.context.$postgres = postgres
+	})
+
 	// there's no way to await this yet
 	// see https://github.com/nitrojs/nitro/issues/915
 	void migrate({
@@ -67,10 +96,8 @@ export default defineNitroPlugin(() => {
 export default defineEventHandler(async event => {
 	const pg = event.context.$postgres
 })
-```
 	
-// or
-```ts
+// or using an alias
 import { postgres } from "#postgres"
 
 ```

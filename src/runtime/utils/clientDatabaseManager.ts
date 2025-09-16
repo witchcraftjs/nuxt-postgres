@@ -1,6 +1,7 @@
 import { last, unreachable } from "@alanscodelog/utils"
 import { PGlite, type PGliteOptions } from "@electric-sql/pglite"
 import { PGliteWorker } from "@electric-sql/pglite/worker"
+import type { BaseLogger } from "@witchcraft/nuxt-logger/shared/createUseLogger"
 import { drizzle as drizzleProxy, type PgRemoteDatabase } from "drizzle-orm/pg-proxy"
 import { drizzle, type PgliteDatabase } from "drizzle-orm/pglite"
 import { sql } from "drizzle-orm/sql"
@@ -47,7 +48,7 @@ export type MigrationOptions = {
 	 * @default window.localStorage if available, otherwise none
 	 */
 	storage?: Storage<any> | undefined
-	migrationsLogger?: { debug: (...args: any) => void, error: (...args: any) => void }
+	migrationsLogger?: BaseLogger
 }
 
 export type ClientMigrationState = {

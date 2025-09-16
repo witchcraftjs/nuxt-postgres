@@ -7,7 +7,7 @@
 	"type": "module",
 	"sideEffects": false,
 	"//exports": {
-		"./drizzleConfig.js": "Special case for drizzle. See the file for more details."
+		"require pointing to ts": "Special case for drizzle. See the file for more details."
 	},
 	"exports": {
 		".": {
