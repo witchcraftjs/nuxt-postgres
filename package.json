@@ -40,6 +40,14 @@
 			"pglite": "This is because of https://github.com/electric-sql/pglite/issues/603 and also was getting some errors about unreachable wasm when not getting this error."
 		}
 	},
+	"peerDependencies": {
+		"@witchcraft/nuxt-logger": "^0.0.2"
+	},
+	"peerDependenciesMeta": {
+		"@witchcraft/nuxt-logger": {
+			"optional": true
+		}
+	},
 	"dependencies": {
 		"@alanscodelog/tsconfigs": "^6.2.0",
 		"@alanscodelog/utils": "^6.0.1",
