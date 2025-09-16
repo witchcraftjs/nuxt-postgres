@@ -37,15 +37,8 @@
 	},
 	"@comments": {
 		"dependencies": {
-			"pglite": "This is because of https://github.com/electric-sql/pglite/issues/603 and also was getting some errors about unreachable wasm when not getting this error."
-		}
-	},
-	"peerDependencies": {
-		"@witchcraft/nuxt-logger": "^0.0.2"
-	},
-	"peerDependenciesMeta": {
-		"@witchcraft/nuxt-logger": {
-			"optional": true
+			"pglite": "This is because of https://github.com/electric-sql/pglite/issues/603 and also was getting some errors about unreachable wasm when not getting this error.",
+			"@witchcraft/nuxt-logger": "This is only for some types for the logger, but is otherwise unused."
 		}
 	},
 	"dependencies": {

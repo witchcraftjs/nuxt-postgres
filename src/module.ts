@@ -2,7 +2,6 @@
 import type { PGliteOptions } from "@electric-sql/pglite"
 import {
 	addImportsDir,
-	addServerPlugin,
 	addServerScanDir,
 	addTypeTemplate,
 	createResolver,
@@ -206,9 +205,6 @@ export default defineNuxtModule<ModuleOptions>({
 		aliasServerImport: "~~/server/postgres"
 	},
 	moduleDependencies: {
-		"@witchcraft/nuxt-logger": {
-			version: pkg.dependencies["@witchcraft/nuxt-logger"]
-		}
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)

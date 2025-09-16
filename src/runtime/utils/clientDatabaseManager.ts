@@ -69,11 +69,7 @@ type AllOptions = Partial<Omit<ClientPostgresOptions, "clientMigrationConfig"> &
 type InitOptions = {
 	bypassEnvCheck?: boolean
 	addToWindowInDev?: boolean
-	logger?: {
-		info: (...args: any[]) => void
-		error: (...args: any[]) => void
-		debug: (...args: any[]) => void
-	}
+	logger?: BaseLogger
 }
 export type ClientDatabaseEntry = {
 	client?: PGlite | PGliteWorker
@@ -230,7 +226,7 @@ export class ClientDatabaseManager {
 		if (conf.autoMigrateClientDb && migrationOpts.migrationJson) {
 			await ClientDatabaseManager.migrate(entry.db, opts.clientMigrationOptions ?? {}, entry.migrationState, name)
 		} else if (!entry.migrationState.skip) {
-			logger.debug({
+			logger.debug?.({
 				ns: "postgres:client:migrate:skip",
 				msg: "Skipping migration because no migrationJson passed or autoMigrateClientDb is false.",
 				migrationJson: !!migrationOpts.migrationJson,
@@ -301,14 +297,14 @@ export class ClientDatabaseManager {
 			preMigrationScript,
 			force,
 			storageMigrationHashKey = "db:lastMigrationHash",
-			migrationsLogger = console,
+			migrationsLogger = console as any as BaseLogger,
 			storage = undefined
 		} = opts
 
 		if (!state.attemptedMigration && !force) {
 			try {
 				const start = performance.now()
-				migrationsLogger.debug({
+				migrationsLogger.debug?.({
 					ns: "postgres:pglite:migrate:start"
 				})
 
@@ -318,7 +314,7 @@ export class ClientDatabaseManager {
 				const lastMigrationHash = !force && await storage?.getItem(storageMigrationHashKey + (name ? `:${name}` : ""))
 
 				if (!force && lastItem.hash === lastMigrationHash && !state.skip) {
-					migrationsLogger.debug({
+					migrationsLogger.debug?.({
 						ns: "postgres:pglite:migrate:skip",
 						msg: "Skipping migration because hash in storage matches migrationJson hash.",
 						hash: lastItem.hash,
@@ -345,14 +341,14 @@ export class ClientDatabaseManager {
 					await storage?.setItem(storageMigrationHashKey, lastItem.hash)
 				}
 
-				migrationsLogger.debug({
+				migrationsLogger.debug?.({
 					ns: "postgres:pglite:migrate:end",
 					hash: lastItem.hash,
 					duration: performance.now() - start
 				})
 			} catch (error) {
 				if (!(error instanceof Error)) { throw error }
-				migrationsLogger.error({
+				migrationsLogger.error?.({
 					ns: "postgres:pglite:migrate:error",
 					error: { message: error.message, stack: error.stack, opts }
 				})
