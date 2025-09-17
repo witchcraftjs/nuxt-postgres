@@ -36,7 +36,8 @@ export default defineNuxtConfig({
 Use the included drizzle config if you want, it will ensure you define the right variables:
 
 ```ts [drizzleConfig.ts]
-import { drizzleConfig } from "@witchcraft/nuxt-postgres/drizzleConfig"
+//@ts-expect-error careful with imports, esm is borked, see nuxt-postgres/src/drizzleConfig.ts
+import { drizzleConfig } from "@witchcraft/nuxt-postgres/drizzleConfig.js"
 import { ensureEnv } from "@witchcraft/nuxt-utils/utils/ensureEnv"
 import { defineConfig } from "drizzle-kit"
 import path from "path"

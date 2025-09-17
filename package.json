@@ -17,7 +17,7 @@
 		"./*": {
 			"types": "./dist/runtime/*.d.ts",
 			"import": "./dist/runtime/*.js",
-			"require": "./dist/runtime/*.ts"
+			"require": "./dist/runtime/*.js"
 		}
 	},
 	"files": [

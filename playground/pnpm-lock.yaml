@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@witchcraft/nuxt-postgres':
         specifier: file:..
-        version: file:..(@netlify/blobs@9.1.2)(@witchcraft/nuxt-logger@0.0.2(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0))(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)))(ioredis@5.7.0)(magicast@0.3.5)(rollup@4.50.0)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))
+        version: file:..(@netlify/blobs@9.1.2)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)))(ioredis@5.7.0)(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0)(rollup@4.50.0)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))
       nuxt:
         specifier: ^4.0.3
         version: 4.0.3(@electric-sql/pglite@0.2.17)(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@24.3.0)(@vue/compiler-sfc@3.5.20)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)))(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7))(ioredis@5.7.0)(magicast@0.3.5)(rollup@4.50.0)(terser@5.43.1)(typescript@5.9.2)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))(yaml@2.8.1)
@@ -1621,11 +1621,6 @@ packages:
 
   '@witchcraft/nuxt-postgres@file:..':
     resolution: {directory: .., type: directory}
-    peerDependencies:
-      '@witchcraft/nuxt-logger': ^0.0.2
-    peerDependenciesMeta:
-      '@witchcraft/nuxt-logger':
-        optional: true
 
   '@witchcraft/nuxt-utils@0.3.2':
     resolution: {integrity: sha512-aBFT2GiUKyAiytVYeXbOllrZJJ2fUvbD5lGVBP2SYyL0LK9sFJj0H3m80UyBGXOLA4m5g51vsvfrDWWt2F3vtQ==}
@@ -5927,14 +5922,14 @@ snapshots:
       pino-pretty: 11.3.0
     transitivePeerDependencies:
       - magicast
-    optional: true
 
-  '@witchcraft/nuxt-postgres@file:..(@netlify/blobs@9.1.2)(@witchcraft/nuxt-logger@0.0.2(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0))(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)))(ioredis@5.7.0)(magicast@0.3.5)(rollup@4.50.0)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))':
+  '@witchcraft/nuxt-postgres@file:..(@netlify/blobs@9.1.2)(db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)))(ioredis@5.7.0)(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0)(rollup@4.50.0)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))':
     dependencies:
       '@alanscodelog/tsconfigs': 6.2.0
       '@alanscodelog/utils': 6.0.1
       '@electric-sql/pglite': 0.2.17
       '@nuxt/kit': 4.0.3(magicast@0.3.5)
+      '@witchcraft/nuxt-logger': 0.0.2(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0)
       '@witchcraft/nuxt-utils': 0.3.2(magicast@0.3.5)
       defu: 6.1.4
       drizzle-kit: 0.31.4
@@ -5944,8 +5939,6 @@ snapshots:
       vite-plugin-top-level-await: 1.6.0(rollup@4.50.0)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))
       vite-plugin-wasm: 3.5.0(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(terser@5.43.1)(yaml@2.8.1))
       zod: 4.1.8
-    optionalDependencies:
-      '@witchcraft/nuxt-logger': 0.0.2(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@azure/app-configuration'
@@ -5989,6 +5982,8 @@ snapshots:
       - magicast
       - mysql2
       - pg
+      - pino
+      - pino-pretty
       - prisma
       - rollup
       - sql.js
@@ -6076,8 +6071,7 @@ snapshots:
 
   async@3.2.6: {}
 
-  atomic-sleep@1.0.0:
-    optional: true
+  atomic-sleep@1.0.0: {}
 
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
@@ -6245,8 +6239,7 @@ snapshots:
 
   colord@2.9.3: {}
 
-  colorette@2.0.20:
-    optional: true
+  colorette@2.0.20: {}
 
   colorspace@1.1.4:
     dependencies:
@@ -6406,8 +6399,7 @@ snapshots:
 
   data-uri-to-buffer@4.0.1: {}
 
-  dateformat@4.6.3:
-    optional: true
+  dateformat@4.6.3: {}
 
   db0@0.3.2(@electric-sql/pglite@0.2.17)(drizzle-orm@0.44.5(@electric-sql/pglite@0.2.17)(postgres@3.4.7)):
     optionalDependencies:
@@ -6742,8 +6734,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fast-copy@3.0.2:
-    optional: true
+  fast-copy@3.0.2: {}
 
   fast-fifo@1.3.2: {}
 
@@ -6757,11 +6748,9 @@ snapshots:
 
   fast-npm-meta@0.4.6: {}
 
-  fast-redact@3.5.0:
-    optional: true
+  fast-redact@3.5.0: {}
 
-  fast-safe-stringify@2.1.1:
-    optional: true
+  fast-safe-stringify@2.1.1: {}
 
   fastq@1.19.1:
     dependencies:
@@ -6935,8 +6924,7 @@ snapshots:
 
   he@1.2.0: {}
 
-  help-me@5.0.0:
-    optional: true
+  help-me@5.0.0: {}
 
   hookable@5.5.3: {}
 
@@ -7088,8 +7076,7 @@ snapshots:
 
   jiti@2.5.1: {}
 
-  joycon@3.1.1:
-    optional: true
+  joycon@3.1.1: {}
 
   js-tokens@4.0.0: {}
 
@@ -7608,8 +7595,7 @@ snapshots:
 
   on-change@5.0.1: {}
 
-  on-exit-leak-free@2.1.2:
-    optional: true
+  on-exit-leak-free@2.1.2: {}
 
   on-finished@2.4.1:
     dependencies:
@@ -7781,7 +7767,6 @@ snapshots:
   pino-abstract-transport@2.0.0:
     dependencies:
       split2: 4.2.0
-    optional: true
 
   pino-pretty@11.3.0:
     dependencies:
@@ -7799,10 +7784,8 @@ snapshots:
       secure-json-parse: 2.7.0
       sonic-boom: 4.2.0
       strip-json-comments: 3.1.1
-    optional: true
 
-  pino-std-serializers@7.0.0:
-    optional: true
+  pino-std-serializers@7.0.0: {}
 
   pino@9.9.0:
     dependencies:
@@ -7817,7 +7800,6 @@ snapshots:
       safe-stable-stringify: 2.5.0
       sonic-boom: 4.2.0
       thread-stream: 3.1.0
-    optional: true
 
   pkg-types@1.3.1:
     dependencies:
@@ -8026,8 +8008,7 @@ snapshots:
 
   process-nextick-args@2.0.1: {}
 
-  process-warning@5.0.0:
-    optional: true
+  process-warning@5.0.0: {}
 
   process@0.11.10: {}
 
@@ -8051,8 +8032,7 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  quick-format-unescaped@4.0.4:
-    optional: true
+  quick-format-unescaped@4.0.4: {}
 
   quote-unquote@1.0.0: {}
 
@@ -8113,8 +8093,7 @@ snapshots:
 
   readdirp@4.1.2: {}
 
-  real-require@0.2.0:
-    optional: true
+  real-require@0.2.0: {}
 
   redis-errors@1.2.0: {}
 
@@ -8202,8 +8181,7 @@ snapshots:
 
   scule@1.3.0: {}
 
-  secure-json-parse@2.7.0:
-    optional: true
+  secure-json-parse@2.7.0: {}
 
   semver@6.3.1: {}
 
@@ -8309,7 +8287,6 @@ snapshots:
   sonic-boom@4.2.0:
     dependencies:
       atomic-sleep: 1.0.0
-    optional: true
 
   source-map-js@1.2.1: {}
 
@@ -8338,8 +8315,7 @@ snapshots:
 
   speakingurl@14.0.1: {}
 
-  split2@4.2.0:
-    optional: true
+  split2@4.2.0: {}
 
   stack-trace@0.0.10: {}
 
@@ -8388,8 +8364,7 @@ snapshots:
 
   strip-final-newline@3.0.0: {}
 
-  strip-json-comments@3.1.1:
-    optional: true
+  strip-json-comments@3.1.1: {}
 
   strip-literal@3.0.0:
     dependencies:
@@ -8454,7 +8429,6 @@ snapshots:
   thread-stream@3.1.0:
     dependencies:
       real-require: 0.2.0
-    optional: true
 
   tiny-invariant@1.3.3: {}
 
