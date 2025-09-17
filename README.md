@@ -60,7 +60,7 @@ import {
 	createPostgresDb,
 	useServerLogger // from @witchcraft/nuxt-logger
 } from "#imports"
-import * as schema from "~~/db/schem.js"
+import * as schema from "~~/db/schema.js"
 
 export const {
 	migrate,
@@ -72,8 +72,7 @@ Setup $postgres on event and optionally migrate the db when starting the server:
 
 ```ts [server/plugins/init.ts]
 import { defineNitroPlugin } from "#imports"
-import { migrate } from "#postgres"
-import { postgres } from "../path/to/instance/or#postgres"
+import { migrate, postgres } from "../path/to/instance/or#postgres"
 
 export default defineNitroPlugin((nitroApp) => {
 
