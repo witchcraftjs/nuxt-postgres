@@ -33,33 +33,37 @@
         devenv-up = self.devShells.${system}.default.config.procfileScript;
         devenv-test = self.devShells.${system}.default.config.test;
       });
-      devShells = forEachSystem (system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
 
-            modules = [
-              ({ pkgs, lib, ... }: {
-                imports = [
-                  "${utils}/devenv/base.nix"
-                  "${utils}/devenv/js.nix"
-                  "${utils}/devenv/postgres.nix"
+      devShells = forEachSystem
+        (system:
+          let
+            overlay = final: prev: { };
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ overlay ];
+            };
+          in
+          {
+            default = devenv.lib.mkShell {
+              inherit inputs pkgs;
+              modules =
+                let
+                in
+                [
+                utils.devenvModule
+                  ({ pkgs, config, ... }: {
+                    custom.js.nodejs.package = pkgs.nodejs_24;
+                    custom.postgres.enabled = true;
+                    # services.postgres.settings = {
+                    #   # for debugging
+                    #   # log_connections = true;
+                    #   # log_statement = "all";
+                    #   # log_disconnections = true;
+                    # };
+
+                  })
                 ];
-
-                custom.js.nodejs.package = pkgs.nodejs_24;
-
-                services.postgres.settings = {
-                  # for debugging
-                  # log_connections = true;
-                  # log_statement = "all";
-                  # log_disconnections = true;
-                };
-              })
-            ];
-          };
-        });
+            };
+          });
     };
 }
