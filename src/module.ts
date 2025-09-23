@@ -137,8 +137,12 @@ export type ClientPostgresOptions = {
 	 * @default { migrationsFolder: "~~/db/client-migrations" }
 	 */
 	clientMigrationConfig: MigrationConfig
-	/** Where to generate the migration json file if `generateClientMigrationsJson` is true. */
-	migrationJsonOutpath: string
+	/**
+	 * Where to generate the migration json file if `generateClientMigrationsJson` is true.
+	 *
+	 * @default clientMigrationConfig.migrationsFolder + /clientMigrations.json
+	 */
+	clientMigrationJsonOutpath: string
 	/**
 	 * Whether to automatically migrate the client side db on first use of useClientDb().
 	 *
@@ -263,7 +267,9 @@ export default defineNuxtModule<ModuleOptions>({
 
 			if (options.generateDrizzleClientMigrationsJson) {
 				// https://github.com/drizzle-team/drizzle-orm/discussions/2532#discussioncomment-10780523
-				const clientMigrationJsonPath = resolveAlias(path.resolve(clientMigrationConfig.migrationsFolder, "clientMigration.json"), nuxt.options.alias)
+				const clientMigrationJsonPath = options.clientMigrationJsonOutpath
+					? resolveAlias(path.resolve(options.clientMigrationJsonOutpath), nuxt.options.alias)
+					: resolveAlias(path.resolve(clientMigrationConfig.migrationsFolder, "clientMigration.json"), nuxt.options.alias)
 				logger.info(`Generating client migrations json file at: ${clientMigrationJsonPath}`)
 
 				const migrations = readMigrationFiles(clientMigrationConfig)

@@ -6,6 +6,7 @@ import { drizzle as drizzlePgLite, type PgliteDatabase } from "drizzle-orm/pglit
 import { migrate as drizzleMigratePglite } from "drizzle-orm/pglite/migrator"
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import { migrate as drizzleMigratePostgresJs } from "drizzle-orm/postgres-js/migrator"
+import path from "node:path"
 import type { RuntimeConfig } from "nuxt/schema"
 import pg from "postgres"
 import { createStorage } from "unstorage"
@@ -94,7 +95,7 @@ export function createPostgresDb(
 				})
 
 				if (useLocal) {
-					const folder = config.serverMigrationConfig.migrationsFolder
+					const folder = path.resolve(config.serverMigrationConfig.migrationsFolder)
 					const migrationJson = readMigrationFiles({
 						migrationsFolder: folder
 					})
