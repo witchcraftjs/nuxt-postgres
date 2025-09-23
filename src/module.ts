@@ -7,7 +7,6 @@ import {
 	createResolver,
 	defineNuxtModule,
 	resolveAlias,
-	resolvePath,
 	useLogger } from "@nuxt/kit"
 import { ensureEnv } from "@witchcraft/nuxt-utils/utils/ensureEnv"
 import { defu } from "defu"
@@ -19,7 +18,6 @@ import type { Options } from "postgres"
 import topLevelAwait from "vite-plugin-top-level-await"
 import wasm from "vite-plugin-wasm"
 
-import pkg from "../package.json" with { type: "json" }
 
 type ConnectionOptions = {
 	host: string
@@ -50,6 +48,10 @@ export type PostgresOptions = {
 	 */
 	serverPgLiteDataDir?: string
 	/**
+	 * Server's migration config.
+	 *
+	 * migrationsFolder will get resolved by the module to be relative to nuxt's rootDir.
+	 *
 	 * @default { migrationsFolder: "~~/db/migrations" }
 	 */
 	serverMigrationConfig: MigrationConfig
@@ -130,7 +132,7 @@ export type ClientPostgresOptions = {
 	 */
 	generateDrizzleClientMigrationsJson: boolean
 	/**
-	 * The drizzle migration config, but for the client side PGlite database.
+	 * The drizzle migration config, but for the client side PGlite database. migrationsFolder will get resolved by the module to be relative to nuxt's rootDir.
 	 *
 	 * @default { migrationsFolder: "~~/db/client-migrations" }
 	 */
@@ -240,7 +242,7 @@ export default defineNuxtModule<ModuleOptions>({
 		delete privateOptions.clientPgLitePath
 
 		const serverConfig = nuxt.options.runtimeConfig.postgres.serverMigrationConfig
-		serverConfig.migrationsFolder = resolveAlias(serverConfig.migrationsFolder, nuxt.options.alias)
+		serverConfig.migrationsFolder = path.relative(nuxt.options.rootDir, resolveAlias(serverConfig.migrationsFolder, nuxt.options.alias))
 
 		nuxt.options.build.transpile.push(resolve("runtime/server/plugins/initServerPostgresDb"))
 		nuxt.options.build.transpile.push(resolve("runtime/server/postgres"))
@@ -257,11 +259,11 @@ export default defineNuxtModule<ModuleOptions>({
 
 			const config = nuxt.options.runtimeConfig.public.postgres
 			const clientMigrationConfig = config.clientMigrationConfig
-			clientMigrationConfig.migrationsFolder = resolveAlias(clientMigrationConfig.migrationsFolder, nuxt.options.alias)
+			clientMigrationConfig.migrationsFolder = path.relative(nuxt.options.rootDir, resolveAlias(clientMigrationConfig.migrationsFolder, nuxt.options.alias))
 
 			if (options.generateDrizzleClientMigrationsJson) {
 				// https://github.com/drizzle-team/drizzle-orm/discussions/2532#discussioncomment-10780523
-				const clientMigrationJsonPath = await resolvePath(path.resolve(clientMigrationConfig.migrationsFolder, "clientMigration.json"), nuxt.options.alias)
+				const clientMigrationJsonPath = resolveAlias(path.resolve(clientMigrationConfig.migrationsFolder, "clientMigration.json"), nuxt.options.alias)
 				logger.info(`Generating client migrations json file at: ${clientMigrationJsonPath}`)
 
 				const migrations = readMigrationFiles(clientMigrationConfig)
@@ -300,7 +302,7 @@ export default defineNuxtModule<ModuleOptions>({
 		addImportsDir(resolve("runtime/composables"))
 		nuxt.options.alias["#postgres-client"] = resolve("runtime/composables/useClientDb")
 		if (options.aliasServerImport) {
-			nuxt.options.alias["#postgres"] = await resolvePath(options.aliasServerImport, nuxt.options.alias)
+			nuxt.options.alias["#postgres"] = resolveAlias(options.aliasServerImport, nuxt.options.alias)
 		}
 
 		addTypeTemplate({
