@@ -22,7 +22,7 @@ import wasm from "vite-plugin-wasm"
 type ConnectionOptions = {
 	host: string
 	port: number
-	password: string
+	password?: string
 	database?: string
 	username?: string
 }
@@ -64,9 +64,11 @@ export type PostgresOptions = {
 	/** postgres.js specific options. */
 	serverPostgresjsOptions: Options<any>
 	/**
-	 * These should not need to be set here. They should be set by env variables instead and not through nuxt, but globally since drizzle also needs to be able to see them for migrations.
+	 * These should not need to be set here. These can be mostly set by env variables (except the password) and not through nuxt since drizzle also needs to be able to see them for migrations.
+	 *
+	 * Note they will get baked into the output unless you use NUXT_POSTGRES_CONNECTION_OPTIONS_ variables to override them.
 	 */
-	connectionOptions: ConnectionOptions
+	connectionOptions: Omit<ConnectionOptions, "password">
 	/**
 	 * Whether to automatically attempt to generate migrations in dev mode.
 	 *
@@ -154,7 +156,9 @@ export type ClientPostgresOptions = {
 
 declare module "@nuxt/schema" {
 	interface RuntimeConfig {
-		postgres: PostgresOptions
+		postgres: Omit<PostgresOptions, "connectionOptions"> & {
+			connectionOptions: ConnectionOptions
+		}
 	}
 
 	interface PublicRuntimeConfig {
@@ -198,7 +202,6 @@ export default defineNuxtModule<ModuleOptions>({
 			// during build these are undefined
 			host: process.env.POSTGRES_HOST!,
 			port: "POSTGRES_PORT" in process.env ? Number.parseInt(process.env.POSTGRES_PORT!, 10) : 5432,
-			password: process.env.POSTGRES_PASSWORD!,
 			database: process.env.POSTGRES_NAME,
 			username: process.env.POSTGRES_USER
 		},
@@ -218,9 +221,9 @@ export default defineNuxtModule<ModuleOptions>({
 		ensureEnv(process.env, [
 			"POSTGRES_HOST",
 			"POSTGRES_USER",
-			"POSTGRES_PASSWORD",
 			"POSTGRES_NAME",
-			"POSTGRES_PORT"
+			"POSTGRES_PORT",
+			"NUXT_POSTGRES_CONNECTION_OPTIONS_PASSWORD"
 		] as const, process.env.DISABLE_POSTGRES_ENSURE_ENV === "true")
 
 		const moduleName = "@witchcraft/nuxt-postgres"
@@ -232,7 +235,13 @@ export default defineNuxtModule<ModuleOptions>({
 
 		nuxt.options.runtimeConfig.postgres = defu(
 			nuxt.options.runtimeConfig.postgres as any,
-			options
+			options,
+			{
+				connectionOptions: {
+					...options.connectionOptions,
+					password: ""
+				}
+			}
 		)
 		nuxt.options.nitro.esbuild ??= {}
 		nuxt.options.nitro.esbuild.options ??= {}

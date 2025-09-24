@@ -32,6 +32,8 @@ export default defineNuxtConfig({
 })
 ```
 
+Set you the password by setting the env `NUXT_POSTGRES_CONNECTION_OPTIONS_PASSWORD`.
+
 
 Use the included drizzle config if you want, it will ensure you define the right variables:
 
