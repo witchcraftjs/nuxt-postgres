@@ -96,56 +96,59 @@ export class ClientDatabaseManager {
 		initOptions: InitOptions = {}
 	): ClientDatabaseEntry | undefined {
 		const exists = this.databases.has(name)
-		if (!exists) {
-			if (!opts) {
-				throw new Error("No config or client passed to useClientDb. Config/client must be passed at least once for each database name.")
+		if (exists) {
+			if (opts) {
+				throw new Error("Cannot re-initialize a client database with different options unless it's entry is removed first.")
 			}
-
-			const clientPgliteOptions = opts.clientPgliteOptions ?? {}
-			if (opts.useWebWorker && clientPgliteOptions.extensions) {
-				const unsupported = Object.keys(clientPgliteOptions.extensions).filter(_ => _ !== "live")
-				if (unsupported.length) {
-					throw new Error(`clientPgliteOptions.extensions contains unsupported extensions, if you need these, you'll need to create a custom worker, see options.webWorkerUrl.\nUnsupported: ${unsupported.join(", ")}`)
-				}
-			}
-			if (!opts.schema && !opts.drizzleProxy) {
-				// eslint-disable-next-line no-console
-				console.warn("No schema for a client side database was provided. This is not recommended. Drizzle will not be able to do db.query type queries. Schema can only safely not be defined if using drizzleProxy (as it would be defined on the real instance).")
-			}
-
-			const client = opts.drizzleProxy
-				? undefined
-				: (opts.useWebWorker
-						? new PGliteWorker(
-							new Worker(opts.webWorkerUrl ?? new URL("./../worker.js", import.meta.url), { type: "module" }),
-							{
-								dataDir: opts.clientPgLitePath ?? `idb:// ${name}`,
-								meta: { options: clientPgliteOptions }
-								// extensions
-							}
-						)
-						: new PGlite(opts.clientPgLitePath ?? `idb://${name}`, clientPgliteOptions))
-
-			const migrationOptions = opts.clientMigrationOptions ?? {}
-
-			const entry = {
-				options: opts,
-				initOptions,
-				client,
-				db: opts.drizzleProxy
-					? drizzleProxy(async (...params: [any, any, any]) => opts.drizzleProxy!(name, ...params))
-					: drizzle({ client: client as any, schema: opts.schema }),
-				migrationState: {
-					...ClientDatabaseManager.defaultMigrationState,
-					storage: migrationOptions.storage ?? ClientDatabaseManager.useDefaultStorage()
-				},
-				path: opts?.clientPgLitePath ?? `idb://${name}`
-
-			}
-			this.databases.set(name, entry)
-			return entry
+			return this.databases.get(name)
 		}
-		return this.databases.get(name)
+		if (!opts) {
+			throw new Error("No config or client passed to useClientDb. Config/client must be passed at least once for each database name.")
+		}
+
+		const clientPgliteOptions = opts.clientPgliteOptions ?? {}
+		if (opts.useWebWorker && clientPgliteOptions.extensions) {
+			const unsupported = Object.keys(clientPgliteOptions.extensions).filter(_ => _ !== "live")
+			if (unsupported.length) {
+				throw new Error(`clientPgliteOptions.extensions contains unsupported extensions, if you need these, you'll need to create a custom worker, see options.webWorkerUrl.\nUnsupported: ${unsupported.join(", ")}`)
+			}
+		}
+		if (!opts.schema && !opts.drizzleProxy) {
+			// eslint-disable-next-line no-console
+			console.warn("No schema for a client side database was provided. This is not recommended. Drizzle will not be able to do db.query type queries. Schema can only safely not be defined if using drizzleProxy (as it would be defined on the real instance).")
+		}
+
+		const client = opts.drizzleProxy
+			? undefined
+			: (opts.useWebWorker
+					? new PGliteWorker(
+						new Worker(opts.webWorkerUrl ?? new URL("./../worker.js", import.meta.url), { type: "module" }),
+						{
+							dataDir: opts.clientPgLitePath ?? `idb:// ${name}`,
+							meta: { options: clientPgliteOptions }
+							// extensions
+						}
+					)
+					: new PGlite(opts.clientPgLitePath ?? `idb://${name}`, clientPgliteOptions))
+
+		const migrationOptions = opts.clientMigrationOptions ?? {}
+
+		const entry = {
+			options: opts,
+			initOptions,
+			client,
+			db: opts.drizzleProxy
+				? drizzleProxy(async (...params: [any, any, any]) => opts.drizzleProxy!(name, ...params))
+				: drizzle({ client: client as any, schema: opts.schema }),
+			migrationState: {
+				...ClientDatabaseManager.defaultMigrationState,
+				storage: migrationOptions.storage ?? ClientDatabaseManager.useDefaultStorage()
+			},
+			path: opts?.clientPgLitePath ?? `idb://${name}`
+
+		}
+		this.databases.set(name, entry)
+		return entry
 	}
 
 	switchDatabase(name: string) {
@@ -161,8 +164,9 @@ export class ClientDatabaseManager {
 		return entry
 	}
 
-	deleteEntry(name: string, { errorIfNotFound = true } = {}): void {
+	async deleteEntry(name: string, { errorIfNotFound = true } = {}): Promise<void> {
 		const entry = this.databases.get(name)
+		await entry?.client?.close()
 		if (errorIfNotFound && !entry) {
 			throw new Error(`No database found by the name of ${name}.`)
 		}
@@ -188,7 +192,7 @@ export class ClientDatabaseManager {
 	): Promise<void> {
 		const entry = this.getEntry(name, { errorIfNotFound: true })!
 
-		this.deleteEntry(name, { errorIfNotFound: false })
+		await this.deleteEntry(name, { errorIfNotFound: false })
 		await this.useClientDb(name, entry.options, entry.initOptions)
 	}
 
