@@ -92,7 +92,7 @@ export class ClientDatabaseManager {
 
 	init(
 		name: string,
-		opts: AllOptions = {},
+		opts: AllOptions, // do not define this or init will break
 		initOptions: InitOptions = {}
 	): ClientDatabaseEntry | undefined {
 		const exists = this.databases.has(name)
