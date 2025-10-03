@@ -213,8 +213,6 @@ export default defineNuxtModule<ModuleOptions>({
 		eventContextKeyName: "$postgres",
 		aliasServerImport: "~~/server/postgres"
 	},
-	moduleDependencies: {
-	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
 
