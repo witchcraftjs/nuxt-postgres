@@ -198,7 +198,7 @@ export class ClientDatabaseManager {
 
 	async useClientDb(
 		name: string = this.defaultDatabaseName,
-		opts: AllOptions = {},
+		opts: AllOptions, // do not define this or init will break
 		{
 			bypassEnvCheck = false,
 			addToWindowInDev = true,
@@ -210,8 +210,8 @@ export class ClientDatabaseManager {
 		}
 
 		const entry = this.init(name, opts)
-		const conf = opts ?? entry?.options ?? {}
-		if (!entry || !conf) unreachable()
+		opts = opts ?? entry?.options ?? {}
+		if (!entry || !opts) unreachable()
 		if (addToWindowInDev) {
 			if (bypassEnvCheck || (import.meta.dev && import.meta.client)) {
 				window.dbs ??= {}
@@ -227,14 +227,14 @@ export class ClientDatabaseManager {
 			}
 		}
 		const migrationOpts = opts.clientMigrationOptions ?? {}
-		if (conf.autoMigrateClientDb && migrationOpts.migrationJson) {
+		if (opts.autoMigrateClientDb && migrationOpts.migrationJson) {
 			await ClientDatabaseManager.migrate(entry.db, opts.clientMigrationOptions ?? {}, entry.migrationState, name)
 		} else if (!entry.migrationState.skip) {
 			logger.debug?.({
 				ns: "postgres:client:migrate:skip",
 				msg: "Skipping migration because no migrationJson passed or autoMigrateClientDb is false.",
 				migrationJson: !!migrationOpts.migrationJson,
-				autoMigrateClientDb: conf.autoMigrateClientDb
+				autoMigrateClientDb: opts.autoMigrateClientDb
 			})
 			entry.migrationState.skip = true
 		}
