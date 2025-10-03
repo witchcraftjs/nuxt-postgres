@@ -30,8 +30,10 @@
 		"build:only": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxt-module-build build'",
 		"dev": "nuxi dev playground",
 		"dev:prepare": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxt-module-build build --stub && pnpm nuxt-module-build prepare && pnpm nuxi prepare playground'",
-		"lint": "eslint \"{src,test,playground/app}/**/*.{ts,vue}\" \"*.{js,cjs,mjs,ts}\"",
+		"lint": "pnpm lint:eslint && pnpm lint:types && pnpm lint:commits",
+		"lint:eslint": "eslint \"{src,test,playground/app}/**/*.{ts,vue}\" \"*.{js,cjs,mjs,ts}\"",
 		"lint:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit",
+		"lint:commits": "commitlint --from-last-tag --to HEAD --verbose",
 		"test": "echo no tests yet",
 		"test:watch": "vitest watch"
 	},
@@ -60,6 +62,7 @@
 	"devDependencies": {
 		"@alanscodelog/eslint-config": "^6.3.1",
 		"@alanscodelog/semantic-release-config": "^5.0.4",
+		"@commitlint/cli": "^20.1.0",
 		"@nuxt/eslint-config": "^1.9.0",
 		"@nuxt/module-builder": "^1.0.2",
 		"@nuxt/schema": "^4.0.3",
