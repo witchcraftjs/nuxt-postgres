@@ -92,7 +92,7 @@ export class ClientDatabaseManager {
 
 	init(
 		name: string,
-		opts: AllOptions, // do not define this or init will break
+		opts?: AllOptions, // do not define this or init will break
 		initOptions: InitOptions = {}
 	): ClientDatabaseEntry | undefined {
 		const exists = this.databases.has(name)
@@ -198,7 +198,7 @@ export class ClientDatabaseManager {
 
 	async useClientDb(
 		name: string = this.defaultDatabaseName,
-		opts: AllOptions, // do not define this or init will break
+		opts?: AllOptions, // do not define this or init will break
 		{
 			bypassEnvCheck = false,
 			addToWindowInDev = true,
