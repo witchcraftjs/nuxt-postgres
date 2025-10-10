@@ -164,7 +164,12 @@ export class ClientDatabaseManager {
 		return entry
 	}
 
-	async deleteEntry(name: string, { errorIfNotFound = true } = {}): Promise<void> {
+	/**
+	 * Closes and removes the database from the list of known databases.
+	 *
+	 * This does NOT delete the database, deletion should be done before calling this through other methods (which, depends on the backend, e.g. fs.rm for a file, `deleteIndexedDbDb` for indexedDB, none for memory, etc.).
+	 */
+	async removeDb(name: string, { errorIfNotFound = true } = {}): Promise<void> {
 		const entry = this.databases.get(name)
 		await entry?.client?.close()
 		if (errorIfNotFound && !entry) {
@@ -192,7 +197,7 @@ export class ClientDatabaseManager {
 	): Promise<void> {
 		const entry = this.getEntry(name, { errorIfNotFound: true })!
 
-		await this.deleteEntry(name, { errorIfNotFound: false })
+		await this.removeDb(name, { errorIfNotFound: false })
 		await this.useClientDb(name, entry.options, entry.initOptions)
 	}
 
@@ -251,7 +256,7 @@ export class ClientDatabaseManager {
 	}
 
 	/**
-	 * Deletes indexedDB databases and any stored migration state. Note that this won't take proper effect until the user navigates away from the page if the request gets blocked.
+	 * Deletes indexedDB databases (this only works if the db is actually using indexedDB, other deletions are not implemented) and any stored migration state. Note that this won't take proper effect until the user navigates away from the page if the request gets blocked.
 	 *
 	 * PGlite does not have a close method yet, see [pglite#142](https://github.com/electric-sql/pglite/issues/142).
 	 *
