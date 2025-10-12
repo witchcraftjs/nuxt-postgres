@@ -151,12 +151,12 @@ export class ClientDatabaseManager {
 		return entry
 	}
 
-	switchDatabase(name: string, { errorIfNotFound = true }: { errorIfNotFound?: boolean } = {}) {
 	/**
 	 * This only changes the default database used by useClientDb, it does not init/re-init anything.
 	 *
 	 * You can pass { errorIfNotFound: false } to allow setting to an undefined database (to, for example, allow deletion of the database on logout).
 	 */
+	switchDefaultDatabase(name: string, { errorIfNotFound = true }: { errorIfNotFound?: boolean } = {}) {
 		this.getEntry(name, { errorIfNotFound })
 		this.defaultDatabaseName = name
 	}

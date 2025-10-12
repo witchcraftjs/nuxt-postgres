@@ -9,6 +9,6 @@ import type { ClientDatabaseManager } from "../utils/clientDatabaseManager"
  *
  * See {@link ClientDatabaseManager.switchDefaultDatabase} for more info.
  */
-export async function useSwitchDefaultDatabase(...args: Parameters<ClientDatabaseManager["switchDatabase"]>): Promise<void> {
-	return useGlobalClientDatabaseManager().switchDatabase(...args)
+export async function useSwitchDefaultDatabase(...args: Parameters<ClientDatabaseManager["switchDefaultDatabase"]>): Promise<void> {
+	return useGlobalClientDatabaseManager().switchDefaultDatabase(...args)
 }
