@@ -115,12 +115,6 @@ export type ClientPostgresOptions = {
 	 * @default false
 	 */
 	useClientDb: boolean
-	/**
-	 * Where to store the client side PGlite database.
-	 *
-	 * @default "idb://[NAME]" (indexeddb)
-	 */
-	clientPgLitePath: string
 
 	/**
 	 * Whether to generate a client migrations json file for use with the client side PGlite database.
@@ -208,7 +202,6 @@ export default defineNuxtModule<ModuleOptions>({
 		generateDrizzleClientMigrationsJson: undefined as any as boolean,
 		useClientDb: false,
 		devAutoGenerateMigrations: false,
-		clientPgLitePath: "idb://local-pglite",
 		autoMigrateClientDb: true,
 		eventContextKeyName: "$postgres",
 		aliasServerImport: "~~/server/postgres"
@@ -250,7 +243,6 @@ export default defineNuxtModule<ModuleOptions>({
 		delete privateOptions.useClientDb
 		delete privateOptions.useWebWorker
 		delete privateOptions.generateClientMigrationsJson
-		delete privateOptions.clientPgLitePath
 
 		const serverConfig = nuxt.options.runtimeConfig.postgres.serverMigrationConfig
 		serverConfig.migrationsFolder = path.relative(nuxt.options.rootDir, resolveAlias(serverConfig.migrationsFolder, nuxt.options.alias))
@@ -263,7 +255,6 @@ export default defineNuxtModule<ModuleOptions>({
 				nuxt.options.runtimeConfig.public.postgres as any,
 				{
 					clientMigrationConfig: options.clientMigrationConfig,
-					clientPgLitePath: options.clientPgLitePath,
 					autoMigrateClientDb: options.autoMigrateClientDb
 				}
 			)

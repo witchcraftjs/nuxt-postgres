@@ -61,6 +61,12 @@ type AllOptions = Partial<Omit<ClientPostgresOptions, "clientMigrationConfig"> &
 	clientPgliteOptions: ClientPostgresOptions["clientPgliteOptions"] & {
 		extensions?: PGliteOptions["extensions"]
 	}
+	/**
+	 * A function that return the filepath for the PGlite database. See {@link https://pglite.dev/docs/filesystems}.
+	 *
+	 * @default "idb://[NAME]" (indexeddb)
+	 */
+	clientPgLitePath?: ((name: string) => string)
 	/** Custom proxy function, in this case a drizzleProxy is created instead of a client, and the database manager passes a wrapper so you can also get the name of the database you're proxying to, the rest of the params are just like the ones in the drizzle proxy docs. */
 	drizzleProxy: (name: string, sql: string, params: any[], method: "all" | "run" | "get" | "values") => Promise<any>
 	/** The schema to use for the client side database. This must be defined unless a proxy is being used. */
@@ -118,18 +124,19 @@ export class ClientDatabaseManager {
 			console.warn("No schema for a client side database was provided. This is not recommended. Drizzle will not be able to do db.query type queries. Schema can only safely not be defined if using drizzleProxy (as it would be defined on the real instance).")
 		}
 
+		const dbPath = opts.clientPgLitePath?.(name) ?? `idb://${name}`
 		const client = opts.drizzleProxy
 			? undefined
 			: (opts.useWebWorker
 					? new PGliteWorker(
 						new Worker(opts.webWorkerUrl ?? new URL("./../worker.js", import.meta.url), { type: "module" }),
 						{
-							dataDir: opts.clientPgLitePath ?? `idb:// ${name}`,
+							dataDir: dbPath,
 							meta: { options: clientPgliteOptions }
 							// extensions
 						}
 					)
-					: new PGlite(opts.clientPgLitePath ?? `idb://${name}`, clientPgliteOptions))
+					: new PGlite(dbPath, clientPgliteOptions))
 
 		const migrationOptions = opts.clientMigrationOptions ?? {}
 
@@ -144,7 +151,7 @@ export class ClientDatabaseManager {
 				...ClientDatabaseManager.defaultMigrationState,
 				storage: migrationOptions.storage ?? ClientDatabaseManager.useDefaultStorage()
 			},
-			path: opts?.clientPgLitePath ?? `idb://${name}`
+			path: dbPath
 
 		}
 		this.databases.set(name, entry)

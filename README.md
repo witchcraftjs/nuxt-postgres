@@ -187,7 +187,7 @@ There are several things to keep in mind when using the client side db:
 
 - While the resolved migrationJson location is added to the public runtime config, it cannot be used to import it dynamically since dynamic imports don't work with variables.
 - **The client options are exposed to the public runtime config.** There is no such thing as the private runtimeConfig client side.
-- `migrate` will try to skip migrations if at all possible. Doing a drizzle migration, even if nothing needs to be done, is expensive (~1500ms), so `migrate` stores a localstorage key `db:lastMigrationHash` (configurable) to prevent unnecessary calls to drizzle's migrate. If the database is configured to use indexedDb, it exists, and the last known hash matches the last migration hash, migration is skipped, reducing the time for non-migrations to around 4-5ms. 
+- `migrate` will try to skip migrations if at all possible. Doing a drizzle migration, even if nothing needs to be done, is expensive (~1500ms), so `migrate` stores a localstorage key `db:lastMigrationHash:[NAME (if  provided)]` (configurable) to prevent unnecessary calls to drizzle's migrate. If the database is configured to use indexedDb, it exists, and the last known hash matches the last migration hash, migration is skipped, reducing the time for non-migrations to around 4-5ms. 
 
 ## Using a Local Server Database for Testing
 
@@ -201,7 +201,7 @@ The client db can be used in electron or other contexts that support it. You wil
 
 Electron example using [@witchcraft/nuxt-electron](TODO):
 ```ts
-const db = await useClientDb("name", {
+const db = await useClientDb("NAME", {
 	schema,
 	clientMigrationOptions: {
 		migrationJson,
@@ -209,7 +209,7 @@ const db = await useClientDb("name", {
 	},
 	...STATIC.ELECTRON_RUNTIME_CONFIG.postgres,
 	// we need to override the filepath so it can write to disk
-	clientPgLitePath: path.join(userDataDir, "db.pglite"),
+	clientPgLitePath: (name) => path.join(userDataDir, `${name}.pglite`),
 }, {
 	logger: useElectronLogger(),
 	// import.meta.client is not defined
