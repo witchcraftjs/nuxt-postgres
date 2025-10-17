@@ -273,6 +273,10 @@ export class ClientDatabaseManager {
 	 * PGlite does not have a close method yet, see [pglite#142](https://github.com/electric-sql/pglite/issues/142).
 	 *
 	 * This is a hackish solution and is only meant to work before page navigation as something is causing issues and not letting the db be deleted. See code.
+	 *
+	 * Note that you might get an error if a database doesn't exist (even though
+	 * the indexedDb does) as it must have been "used"/loaded at least once for
+	 * us to know it exists. Just do useClientDb(name) then delete.
 	 */
 	async deleteIndexedDbDb(
 		name: string = this.defaultDatabaseName
