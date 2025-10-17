@@ -1,3 +1,38 @@
+packages:
+  - ./
+  - playground/
 patchedDependencies:
-  '@nuxt/module-builder': patches/@nuxt__module-builder.patch
+  "@nuxt/module-builder": patches/@nuxt__module-builder.patch
 allowUnusedPatches: true
+settings:
+  cleanupUnusedCatalogs: false
+  catalogMode: strict
+catalog:
+  "@alanscodelog/eslint-config": ^6.3.1
+  "@alanscodelog/semantic-release-config": ^5.0.4
+  "@alanscodelog/tsconfigs": ^6.2.0
+  "@alanscodelog/utils": ^6.0.2
+  "@commitlint/cli": ^20.1.0
+  "@electric-sql/pglite": ~0.2.17
+  "@nuxt/eslint-config": ^1.9.0
+  "@nuxt/kit": ^4.1.2
+  "@nuxt/module-builder": ^1.0.2
+  "@nuxt/schema": ^4.1.2
+  "@nuxt/test-utils": ^3.19.2
+  "@witchcraft/nuxt-logger": ^0.0.6
+  "@witchcraft/nuxt-utils": ^0.3.3
+  changelogen: ^0.5.7
+  cross-env: ^10.0.0
+  drizzle-kit: ^0.31.4
+  drizzle-orm: ^0.44.5
+  eslint: ^9.34.0
+  husky: ^9.1.7
+  nuxt: ^4.1.2
+  postgres: ^3.4.7
+  typescript: ~5.9.2
+  unstorage: ^1.17.0
+  vite-plugin-top-level-await: ^1.6.0
+  vite-plugin-wasm: ^3.5.0
+  vitest: ^3.2.4
+  vue-tsc: ^3.0.6
+  zod: ^4.1.8

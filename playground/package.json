@@ -6,14 +6,13 @@
 		"dev": "nuxi dev",
 		"build": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'nuxi build'",
 		"generate": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'nuxi generate'",
-		"prepare": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxi prepare'",
-		"update-dep": "cd ../ && pnpm build:only && cd playground && pnpm update @witchcraft/nuxt-postgres"
+		"prepare": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxi prepare'"
 	},
 	"dependencies": {
-		"@witchcraft/nuxt-postgres": "file:..",
-		"nuxt": "^4.0.3"
+		"@witchcraft/nuxt-postgres": "workspace:*",
+		"nuxt": "catalog:"
 	},
 	"devDependencies": {
-		"cross-env": "^10.0.0"
+		"cross-env": "catalog:"
 	}
 }
