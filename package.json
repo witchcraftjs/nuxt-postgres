@@ -25,7 +25,7 @@
 		"src"
 	],
 	"scripts": {
-		"prepare": "husky && cd playground && pnpm i --ignore-scripts",
+		"prepare": "husky && pnpm build",
 		"build": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxt-module-build prepare && pnpm nuxt-module-build build && pnpm nuxi build playground'",
 		"build:only": "cross-env-shell DISABLE_POSTGRES_ENSURE_ENV=true 'pnpm nuxt-module-build build'",
 		"dev": "nuxi dev playground",
