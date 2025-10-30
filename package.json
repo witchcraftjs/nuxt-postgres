@@ -43,6 +43,10 @@
 			"@witchcraft/nuxt-logger": "This is only for some types for the logger, but is otherwise unused."
 		}
 	},
+	"peerDependencies": {
+		"@electric-sql/pglite": "catalog:",
+		"drizzle-orm": "catalog:"
+	},
 	"dependencies": {
 		"@alanscodelog/tsconfigs": "catalog:",
 		"@alanscodelog/utils": "catalog:",
