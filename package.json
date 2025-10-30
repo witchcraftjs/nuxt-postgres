@@ -1,6 +1,6 @@
 {
 	"name": "@witchcraft/nuxt-postgres",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"description": "Nuxt module for logging.",
 	"repository": "witchcraftjs/nuxt-postgres",
 	"license": "MIT",
