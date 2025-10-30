@@ -162,12 +162,6 @@ declare module "@nuxt/schema" {
 
 export interface ModuleOptions extends PostgresOptions, ClientPostgresOptions {
 	/**
-	 * Will create the types for this key on the H3Event
-	 *
-	 * @default $postgres
-	 */
-	eventContextKeyName: string
-	/**
 	 * Where the postgres instance is (no extension needed), to set the #postgres alias autimatically.
 	 *
 	 * Pass false to disable.
@@ -203,7 +197,6 @@ export default defineNuxtModule<ModuleOptions>({
 		useClientDb: false,
 		devAutoGenerateMigrations: false,
 		autoMigrateClientDb: true,
-		eventContextKeyName: "$postgres",
 		aliasServerImport: "~~/server/postgres"
 	},
 	async setup(options, nuxt) {
@@ -309,20 +302,6 @@ export default defineNuxtModule<ModuleOptions>({
 		if (options.aliasServerImport) {
 			nuxt.options.alias["#postgres"] = resolveAlias(options.aliasServerImport, nuxt.options.alias)
 		}
-
-		addTypeTemplate({
-			filename: "types/witchcraft-postgres.d.ts",
-			getContents: () => `
-			import { PgliteDatabase } from "drizzle-orm/pglite"
-			import { PostgresJsDatabase } from "drizzle-orm/postgres-js"
-				declare module 'h3' {
-					interface H3EventContext {
-						${options.eventContextKeyName}: PgliteDatabase | PostgresJsDatabase;
-					}
-				}
-				export {}
-			`
-		})
 
 		nuxt.hook("vite:extendConfig", config => {
 			// https:// pglite.dev/docs/bundler-support#vite

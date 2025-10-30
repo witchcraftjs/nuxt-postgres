@@ -76,6 +76,18 @@ Setup $postgres on event and optionally migrate the db when starting the server:
 import { defineNitroPlugin } from "#imports"
 import { migrate, postgres } from "../path/to/instance/or#postgres"
 
+// here or in some global types file
+import { PgliteDatabase } from "drizzle-orm/pglite"
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js"
+import * as schema from "~~/db/schema.js"
+declare module 'h3' {
+	interface H3EventContext {
+		${options.eventContextKeyName}: PgliteDatabase<typeof schema> | PostgresJsDatabase<typeof schema>;
+	}
+}
+export {}
+
+
 export default defineNitroPlugin((nitroApp) => {
 
 	// the module auto types the $postgres key (you can change the key name with the eventContextKeyName option)
