@@ -129,13 +129,13 @@ export class ClientDatabaseManager {
 			? undefined
 			: (opts.useWebWorker
 					? new PGliteWorker(
-						new Worker(opts.webWorkerUrl ?? new URL("./../worker.js", import.meta.url), { type: "module" }),
-						{
-							dataDir: dbPath,
-							meta: { options: clientPgliteOptions }
+							new Worker(opts.webWorkerUrl ?? new URL("./../worker.js", import.meta.url), { type: "module" }),
+							{
+								dataDir: dbPath,
+								meta: { options: clientPgliteOptions }
 							// extensions
-						}
-					)
+							}
+						)
 					: new PGlite(dbPath, clientPgliteOptions))
 
 		const migrationOptions = opts.clientMigrationOptions ?? {}

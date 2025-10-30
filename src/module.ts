@@ -278,6 +278,7 @@ export default defineNuxtModule<ModuleOptions>({
 				await fs.writeFile(clientMigrationJsonPath, JSON.stringify(migrations))
 
 				nuxt.hook("vite:extendConfig", conf => {
+					// @ts-expect-error -- new type says it's readonly but also that it might be undefined :/
 					conf.plugins ??= []
 					let foundWasm = false
 					let foundTopLevelAwait = false
@@ -325,6 +326,7 @@ export default defineNuxtModule<ModuleOptions>({
 
 		nuxt.hook("vite:extendConfig", config => {
 			// https:// pglite.dev/docs/bundler-support#vite
+			// @ts-expect-error - same as above
 			config.optimizeDeps ??= {}
 			config.optimizeDeps.exclude ??= []
 			config.optimizeDeps.exclude.push("@electric-sql/pglite")
