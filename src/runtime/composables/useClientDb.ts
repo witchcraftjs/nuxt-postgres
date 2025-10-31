@@ -10,7 +10,7 @@ export async function useClientDb<
 	TName extends keyof LocalPgDbTypes | string,
 	TDb extends TName extends keyof LocalPgDbTypes ? LocalPgDbTypes[TName] : (PgliteDatabase | PgRemoteDatabase)
 >(
-	name: TName | undefined,
+	name?: TName,
 	opts?: AllOptions, // do not define this or init will break
 	initOpts: InitOptions = {}
 ):
