@@ -3,7 +3,6 @@ import type { PGliteOptions } from "@electric-sql/pglite"
 import {
 	addImportsDir,
 	addServerScanDir,
-	addTypeTemplate,
 	createResolver,
 	defineNuxtModule,
 	resolveAlias,
@@ -302,6 +301,7 @@ export default defineNuxtModule<ModuleOptions>({
 		if (options.aliasServerImport) {
 			nuxt.options.alias["#postgres"] = resolveAlias(options.aliasServerImport, nuxt.options.alias)
 		}
+		nuxt.options.alias["#witchcraft-nuxt-postgres"] = resolve("runtime")
 
 		nuxt.hook("vite:extendConfig", config => {
 			// https:// pglite.dev/docs/bundler-support#vite

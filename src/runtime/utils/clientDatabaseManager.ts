@@ -11,6 +11,8 @@ import localStorageDriver from "unstorage/drivers/localstorage"
 import { z } from "zod"
 
 import type { ClientPostgresOptions } from "../../module.js"
+import type { LocalPgDbTypes } from "../types.js"
+
 
 export const zMigrationJson = z.array(z.object({
 	sql: z.array(z.string()),
@@ -56,7 +58,7 @@ export type ClientMigrationState = {
 	skip: boolean
 	storage?: Storage<any>
 }
-type AllOptions = Partial<Omit<ClientPostgresOptions, "clientMigrationConfig"> & {
+export type AllOptions = Partial<Omit<ClientPostgresOptions, "clientMigrationConfig"> & {
 	clientMigrationOptions: MigrationOptions
 	clientPgliteOptions: ClientPostgresOptions["clientPgliteOptions"] & {
 		extensions?: PGliteOptions["extensions"]
@@ -72,7 +74,7 @@ type AllOptions = Partial<Omit<ClientPostgresOptions, "clientMigrationConfig"> &
 	/** The schema to use for the client side database. This must be defined unless a proxy is being used. */
 	schema?: any
 }>
-type InitOptions = {
+export type InitOptions = {
 	bypassEnvCheck?: boolean
 	addToWindowInDev?: boolean
 	logger?: BaseLogger
@@ -213,15 +215,19 @@ export class ClientDatabaseManager {
 		await this.useClientDb(name, entry.options, entry.initOptions)
 	}
 
-	async useClientDb(
-		name: string = this.defaultDatabaseName,
+	async useClientDb<
+		TName extends keyof LocalPgDbTypes | string,
+		TDb extends TName extends keyof LocalPgDbTypes ? LocalPgDbTypes[TName] : (PgliteDatabase | PgRemoteDatabase)
+	>(
+		name: TName = this.defaultDatabaseName as TName,
 		opts?: AllOptions, // do not define this or init will break
 		{
 			bypassEnvCheck = false,
 			addToWindowInDev = true,
 			logger = typeof console !== "undefined" ? console as any : {}
 		}: InitOptions = {}
-	): Promise<PgliteDatabase | PgRemoteDatabase> {
+	):
+	Promise<TDb> {
 		if (!bypassEnvCheck && !import.meta.client) {
 			return {} as any
 		}
@@ -255,7 +261,7 @@ export class ClientDatabaseManager {
 			})
 			entry.migrationState.skip = true
 		}
-		return entry.db
+		return entry.db as any
 	}
 
 	static useDefaultStorage(): Storage<any> | undefined {

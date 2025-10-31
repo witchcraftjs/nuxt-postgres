@@ -89,8 +89,6 @@ export {}
 
 
 export default defineNitroPlugin((nitroApp) => {
-
-	// the module auto types the $postgres key (you can change the key name with the eventContextKeyName option)
 	nitroApp.hooks.hook("request", event => {
 		event.context.$postgres = postgres
 	})
@@ -193,6 +191,22 @@ if (import.meta.client) {
 	})
 }
 const db = useClientDb("client")
+```
+
+The local database is not completely typed (with a schema). To properly type it you will need to add in some global type file:
+
+```ts
+import * as schema from "~~/db/client-schema.ts"
+declare module "#witchcraft/nuxt-postgres/types.js" {
+	export interface Register {
+		ExtendedLocalPgDbTypes: {
+			"client": typeof schema
+		}
+	}
+}
+export {}
+
+
 ```
 
 There are several things to keep in mind when using the client side db:
