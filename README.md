@@ -200,8 +200,10 @@ import * as schema from "~~/db/client-schema.ts"
 declare module "#witchcraft/nuxt-postgres/types.js" {
 	export interface Register {
 		ExtendedLocalPgDbTypes: {
-			"client": typeof schema
+			"client": PgliteDatabase<typeof schema> | PgRemoteDatabase<typeof schema>
 		}
+		// or to type many dbs the same (e.g. one per user)
+		// ExtendedLocalPgDbTypes: Record<string, PgliteDatabase<typeof schema> | PgRemoteDatabase<typeof schema>>
 	}
 }
 export {}
