@@ -275,10 +275,10 @@ export default defineNuxtModule<ModuleOptions>({
 					let foundWasm = false
 					let foundTopLevelAwait = false
 					for (const plugin of conf.plugins) {
-						if ((plugin as any).name === "vite-plugin-wasm") {
+						if ((plugin as any)?.name === "vite-plugin-wasm") {
 							foundWasm = true
 						}
-						if ((plugin as any).name === "vite-plugin-top-level-await") {
+						if ((plugin as any)?.name === "vite-plugin-top-level-await") {
 							foundTopLevelAwait = true
 						}
 					}
