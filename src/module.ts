@@ -201,13 +201,15 @@ export default defineNuxtModule<ModuleOptions>({
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
 
-		ensureEnv(process.env, [
-			"POSTGRES_HOST",
-			"POSTGRES_USER",
-			"POSTGRES_NAME",
-			"POSTGRES_PORT",
-			"NUXT_POSTGRES_CONNECTION_OPTIONS_PASSWORD"
-		] as const, process.env.DISABLE_POSTGRES_ENSURE_ENV === "true")
+		if (!options.usePgLiteOnServer) {
+			ensureEnv(process.env, [
+				"POSTGRES_HOST",
+				"POSTGRES_USER",
+				"POSTGRES_NAME",
+				"POSTGRES_PORT",
+				"NUXT_POSTGRES_CONNECTION_OPTIONS_PASSWORD"
+			] as const, process.env.DISABLE_POSTGRES_ENSURE_ENV === "true")
+		}
 
 		const moduleName = "@witchcraft/nuxt-postgres"
 
