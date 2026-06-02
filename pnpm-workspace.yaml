@@ -6,9 +6,9 @@ allowUnusedPatches: true
 
 catalog:
   '@alanscodelog/eslint-config': ^6.3.1
-  '@alanscodelog/semantic-release-config': ^6.0.0
-  '@alanscodelog/tsconfigs': ^6.2.0
-  '@alanscodelog/utils': ^6.0.2
+  '@alanscodelog/semantic-release-config': ^6.0.2
+  '@alanscodelog/tsconfigs': ^6.3.0
+  '@alanscodelog/utils': ^6.2.0
   '@commitlint/cli': ^20.1.0
   '@electric-sql/pglite': ~0.3.11
   '@nuxt/eslint-config': ^1.10.0
@@ -16,7 +16,7 @@ catalog:
   '@nuxt/module-builder': ^1.0.2
   '@nuxt/schema': ^4.2.0
   '@nuxt/test-utils': ^3.20.1
-  '@witchcraft/nuxt-logger': ^0.0.10
+  '@witchcraft/nuxt-logger': ^0.0.11
   '@witchcraft/nuxt-utils': ^0.3.6
   changelogen: ^0.6.2
   cross-env: ^10.0.0
@@ -24,7 +24,7 @@ catalog:
   drizzle-orm: ^0.44.7
   eslint: ^9.34.0
   husky: ^9.1.7
-  nuxt: ^4.2.0
+  nuxt: ^4.2.1
   postgres: ^3.4.7
   typescript: ~5.9.2
   unstorage: ^1.17.0
@@ -40,3 +40,10 @@ patchedDependencies:
 settings:
   catalogMode: strict
   cleanupUnusedCatalogs: false
+
+strictPeerDependencies: false
+minimumReleaseAge: 20160
+blockExoticSubdeps: true
+minimumReleaseAgeExclude:
+  - "@alanscodelog/*"
+  - "@witchcraft/*"
