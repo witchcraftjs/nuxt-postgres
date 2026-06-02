@@ -1,7 +1,7 @@
 import { last, unreachable } from "@alanscodelog/utils"
 import { PGlite, type PGliteOptions } from "@electric-sql/pglite"
 import { PGliteWorker } from "@electric-sql/pglite/worker"
-import type { BaseLogger } from "@witchcraft/nuxt-logger/shared/createUseLogger"
+import type { BaseLogger } from "@witchcraft/nuxt-logger/types"
 import { drizzle as drizzleProxy, type PgRemoteDatabase } from "drizzle-orm/pg-proxy"
 import { drizzle, type PgliteDatabase } from "drizzle-orm/pglite"
 import { sql } from "drizzle-orm/sql"

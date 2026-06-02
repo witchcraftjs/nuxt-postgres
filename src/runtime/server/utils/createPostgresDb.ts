@@ -1,6 +1,6 @@
 import { run } from "@alanscodelog/utils/run"
 import { PGlite } from "@electric-sql/pglite"
-import type { BaseLogger } from "@witchcraft/nuxt-logger/shared/createUseLogger"
+import type { BaseLogger } from "@witchcraft/nuxt-logger/types"
 import { readMigrationFiles } from "drizzle-orm/migrator"
 import { drizzle as drizzlePgLite, type PgliteDatabase } from "drizzle-orm/pglite"
 import { migrate as drizzleMigratePglite } from "drizzle-orm/pglite/migrator"
