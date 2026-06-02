@@ -1,5 +1,6 @@
 # @witchcraft/nuxt-postgres
 
+[![Release][release-src]][release-href]
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
@@ -278,6 +279,9 @@ await useClientDb("client", {
 ```
 
 <!-- Badges -->
+[release-src]: https://github.com/witchcraftjs/nuxt-postgres/actions/workflows/release.yml/badge.svg
+[release-href]: https://github.com/witchcraftjs/nuxt-postgres/actions/workflows/release.yml
+
 [npm-version-src]: https://img.shields.io/npm/v/@witchcraft/nuxt-postgres/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/@witchcraft/nuxt-postgres
 
