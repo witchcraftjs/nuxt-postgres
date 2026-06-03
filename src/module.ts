@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/check-tag-names */
 import type { PGliteOptions } from "@electric-sql/pglite"
 import {
 	addImportsDir,
@@ -7,6 +6,7 @@ import {
 	defineNuxtModule,
 	resolveAlias,
 	useLogger } from "@nuxt/kit"
+import type { PublicRuntimeConfig } from "@nuxt/schema"
 import { ensureEnv } from "@witchcraft/nuxt-utils/utils/ensureEnv"
 import { defu } from "defu"
 import type { MigrationConfig } from "drizzle-orm/migrator"
@@ -253,7 +253,7 @@ export default defineNuxtModule<ModuleOptions>({
 				}
 			)
 
-			const config = nuxt.options.runtimeConfig.public.postgres
+			const config = nuxt.options.runtimeConfig.public.postgres as PublicRuntimeConfig["postgres"]
 			const clientMigrationConfig = config.clientMigrationConfig
 			clientMigrationConfig.migrationsFolder = path.relative(nuxt.options.rootDir, resolveAlias(clientMigrationConfig.migrationsFolder, nuxt.options.alias))
 
