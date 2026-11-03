@@ -20,7 +20,7 @@ ensureEnv(process.env, [
 	"POSTGRES_USER",
 	"POSTGRES_PASSWORD",
 	"POSTGRES_NAME"
-])
+], process.env.DISABLE_POSTGRES_ENSURE_ENV === "true")
 
 export const drizzleConfig: Config = {
 	dialect: "postgresql",
