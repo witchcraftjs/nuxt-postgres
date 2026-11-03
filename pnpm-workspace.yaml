@@ -7,8 +7,8 @@ allowUnusedPatches: true
 catalog:
   '@alanscodelog/eslint-config': ^6.3.1
   '@alanscodelog/semantic-release-config': ^6.0.2
-  '@alanscodelog/tsconfigs': ^6.3.0
-  '@alanscodelog/utils': ^6.2.0
+  '@alanscodelog/tsconfigs': ^6.3.1
+  '@alanscodelog/utils': ^6.3.0
   '@commitlint/cli': ^20.1.0
   '@electric-sql/pglite': ~0.3.11
   '@nuxt/eslint-config': ^1.10.0
@@ -16,8 +16,8 @@ catalog:
   '@nuxt/module-builder': ^1.0.3
   '@nuxt/schema': ^4.2.0
   '@nuxt/test-utils': ^3.20.1
-  '@witchcraft/nuxt-logger': ^0.0.11
-  '@witchcraft/nuxt-utils': ^0.3.6
+  '@witchcraft/nuxt-logger': ^0.1.3
+  '@witchcraft/nuxt-utils': ^0.3.17
   changelogen: ^0.6.2
   cross-env: ^10.0.0
   drizzle-kit: ^0.31.6
